@@ -16,7 +16,7 @@ class UpdateBook(forms.ModelForm):
         widgets = {
             'name_product': forms.TextInput(attrs={'class':'form-control'}),
             'price': forms.DecimalField(),
-            "genre": forms.ChoiceField(attrs={'class':'form-control', 'choice':Book.GENRE_LIST}),
+            "genre": forms.ChoiceField(),
             "img": forms.ImageField(attrs={'class':'form-control'}),
 
         }

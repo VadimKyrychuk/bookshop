@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import *
+from .forms import UpdateBook
 from django.core.paginator import Paginator
 
 
@@ -22,5 +23,6 @@ def book(request):
 
 
 def update_book(request, book_id):
-    if request.GET:
-        
+    if request.POST:
+        form = UpdateBook(request.POST)
+    return render(request, '', {'form':form})
