@@ -1,42 +1,47 @@
 {% extends './partials/base.html' %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        {% for i in book %}
-        <div class="card mb-3 mt-4 offset-mb-1" style="max-width: 600px;margin-right:25px;">
-            <div class="container-mt-2 d-flex justify-content-between" style="margin:8px">
-                <form action="{% url 'book' %}" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="id" value="{{ i.id }}">
-                    <button class="btn btn-danger">
-                        <i class="far fa-trash-alt"></i>
-                    </button>
-                </form>
-                <form action="{url 'update_book' i.id }" method="get">
-                    {% csrf_token %}
-                    <input type="hidden" name="id" value="{{ i.id }}">
-                    <button class="btn btn-primary">
-                        <i class="far fa-edit"></i>
-                    </button>
-                </form>
-            </div>
-            <div class="row g-0 mt-2">
-                <div class="col-md-4">
-                    <img src='{{ i.img.url }}' style="width:205px">
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">{{i.name_product}}</h5>
-                        <p class="card-text">{{i.get_genre_display}}</p>
-                        <p class="card-text">{{i.price}} UAH</p>
+    <div class="container">
+        <div class="row">
+            {% for i in book %}
+                <div class="card mb-3 mt-4 offset-mb-1" style="max-width: 490px;margin-right:25px;">
+                    <div class="container-mt-2 d-flex justify-content-between" style="margin:8px">
+                        <form action="{% url 'book' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ i.id }}">
+                            <button class="btn btn-danger">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </form>
+                        <form action="{% url 'update_book' i.id %}" method="get">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ i.id }}">
+                            <button class="btn btn-primary">
+                                <i class="far fa-edit"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="row g-0 mt-2">
+                        <div class="col-md-4">
+                            {% if i.img %}
+                                <img src='{{ i.img.url }}' style="width:160px">
+                            {% else %}
+                                <img src='media/not.jpg' style="width:160px">
+
+                            {% endif %}
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ i.name_product }}</h5>
+                                <p class="card-text">{{ i.get_genre_display }}</p>
+                                <p class="card-text">{{ i.price }} UAH</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-</div>
 
-{% include './partials/pagination.html' %}
-{% endblock  %}
+    {#{% include './partials/pagination.html' %}#}
+{% endblock %}

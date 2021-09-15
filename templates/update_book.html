@@ -1,6 +1,17 @@
 {% extends './partials/base.html' %}
 
 {% block content %}
-{% csrf_token %}
-{{form.as_p}}
+
+    <div class="container">
+        <div class="row">
+            <form method="post" enctype='multipart/form-data'>
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="hidden" name="id" value="{{ book_id }}">
+                <button class="btn btn-primary">Обновить</button>
+            </form>
+
+        </div>
+    </div>
+
 {% endblock %}

@@ -1,4 +1,6 @@
-from django.shortcuts import render, get_object_or_404
+import string
+
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
 from .forms import UpdateBook
 from django.core.paginator import Paginator
@@ -23,6 +25,14 @@ def book(request):
 
 
 def update_book(request, book_id):
-    if request.POST:
-        form = UpdateBook(request.POST)
-    return render(request, '', {'form':form})
+    if request.method == 'GET':
+        book = get_object_or_404(pk=int(book_id), klass=Book)
+        form = UpdateBook(instance=book)
+    else:
+        book = get_object_or_404(pk=int(book_id), klass=Book)
+        form = UpdateBook(request.POST, request.FILES, instance=book)
+        if form.is_valid():
+            b = form.save(commit=False)
+            b.save()
+            print(b)
+    return render(request, 'update_book.html', {'form':form, 'book_id':book_id})
