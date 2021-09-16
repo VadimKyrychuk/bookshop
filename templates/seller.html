@@ -1,0 +1,46 @@
+{% extends './partials/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        {% for i in content %}
+        <div class="col-md-6 mt-4 ">
+            <div class="card" style="width: 18rem;">
+                <div class="container d-flex justify-content-between" style="padding:12px 26px 0px 26px">
+                    <form action="{% url 'seller' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{i.id}}">
+                        <button class="btn btn-danger">
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                    </form>
+
+                    <form action="{% url 'update_seller' i.id %}" method="get">
+                        <input type="hidden" name="id" value="{{i.id}}">
+                        <button class="btn btn-primary">
+                            <i class="far fa-edit"></i>
+                        </button>
+                    </form>
+                </div>
+                <div class="col-md-4" style="display:contents; ">
+                            {% if i.img %}
+                                <img src='{{ i.img.url }}' style="width:230px; margin:auto;margin-top:15px; border-radius:11px">
+                            {% else %}
+                                <img src='media/not.jpg' style="width:230px;margin:auto;margin-top:15px">
+                            {% endif %}
+                        </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{i.last_name}} {{i.first_name}}</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">{{i.phone}}</li>
+                    <li class="list-group-item">{{i.get_position_display}}</li>
+                    <li class="list-group-item">{% firstof i.email "Не найдено"%}</li>
+                </ul>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

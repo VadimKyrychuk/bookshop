@@ -3,7 +3,8 @@
 {% block content %}
     <div class="container">
         <div class="row">
-            {% for i in book %}
+            {% for i in content %}
+
                 <div class="card mb-3 mt-4 offset-mb-1" style="max-width: 490px;margin-right:25px;">
                     <div class="container-mt-2 d-flex justify-content-between" style="margin:8px">
                         <form action="{% url 'book' %}" method="post">
@@ -27,7 +28,6 @@
                                 <img src='{{ i.img.url }}' style="width:160px">
                             {% else %}
                                 <img src='media/not.jpg' style="width:160px">
-
                             {% endif %}
                         </div>
                         <div class="col-md-8">
@@ -43,5 +43,5 @@
         </div>
     </div>
 
-    {#{% include './partials/pagination.html' %}#}
+    {% include './partials/paginator.html' %}
 {% endblock %}
