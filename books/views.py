@@ -1,12 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
-from .forms import UpdateBook, UpdateCustomer, UpdateSeller
+from .forms import UpdateBook, UpdateCustomer, UpdateSeller, UpdateOrder, Report1
 from django.core.paginator import Paginator
-
-
-def home(request):
-    return render(request, 'home.html')
-
+from django.db.models import Q
 
 def pagination(request, instanse):
     pagin = Paginator(instanse, 4)
@@ -15,15 +11,22 @@ def pagination(request, instanse):
     return page_obj
 
 
+
+def home(request):
+    return render(request, 'home.html')
+
+
 def book(request):
+    search_query = request.GET.get('search_query', None) or request.POST.get('search_query', '')
     if request.POST:
         curr_element = request.POST.get('id', None)
         elem = get_object_or_404(pk=curr_element, klass=Book)
         elem.delete()
-        book = Book.objects.all()
+        book = Book.objects.all() if not search_query  else Book.objects.filter\
+            (Q(name_product__icontains=search_query))
     else:
-        book = Book.objects.all()
-
+        book = Book.objects.all() if not search_query  else Book.objects.filter\
+            (Q(name_product__icontains=search_query))
     return render(request, 'book.html', {'content': pagination(request, book)})
 
 
@@ -90,9 +93,38 @@ def update_seller(request, seller_id):
         return redirect('/seller')
     return render(request, 'update_seller.html', {'form': form, 'seller_id': seller_id})
 
+
 def order(request):
     if request.POST:
         curr_ord = request.POST.get("id", None)
-        ord_elem = get_object_or_404(pk=int(id_order))
-    order = Order.objects.all()
-    return render(request, 'order.htnl', {'content':pagination(request, order)})
+        ord_elem = get_object_or_404(pk=int(curr_ord), klass=Order)
+        ord_elem.delete()
+        order = Order.objects.all()
+    else:
+        order = Order.objects.all()
+    return render(request, 'order.html', {'content': pagination(request, order)})
+
+
+def update_order(request, order_id):
+    if request.method == "GET":
+        current_order = get_object_or_404(pk=int(order_id), klass=Order)
+        form = UpdateOrder(instance=current_order)
+    else:
+        current_order = get_object_or_404(pk=int(order_id), klass=Order)
+        form = UpdateOrder(request.POST, instance=current_order)
+        if form.is_valid():
+            element = form.save(commit=False)
+            element.save()
+        return redirect('/order')
+    return render(request, 'update_order.html', {'form': form, 'order_id': order_id})
+
+def seller_buyers(request):
+    form = Report1()
+    seller_buyers = Order.objects.filter(seller__pk=request.POST.get('seller'))
+    id_custom = []
+    custom = []
+    for i in seller_buyers:
+        if not i.customer.id in id_custom:
+            custom.append(i.customer)
+            id_custom.append(i.customer.id)
+    return render(request, 'seller_buyers.html', {'form':form, 'content':custom})

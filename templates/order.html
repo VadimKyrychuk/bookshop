@@ -1,0 +1,70 @@
+{% extends './partials/base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2" style="padding-left:40px">
+            <ul class="nav flex-column" style="font-size:25px; border:1px solid black; border-radius:10px">
+                <li class="nav-item">
+                    <a class="nav-link"  href="{% url 'seller_buyers' %}">Отчет 1</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Отчет 2</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Отчет 3</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Отчет 4</a>
+                </li>
+
+            </ul>
+        </div>
+        <div class="col-md-10">
+            <div class="container">
+    <div class="row">
+        {% for i in content %}
+        <div class="col-md-6">
+            <div class="card" style="width: 28rem; margin-top:25px">
+                <div class="container d-flex justify-content-between" style="margin-top:15px">
+                    <form action="{% url 'order' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{i.id}}">
+                        <button class="btn btn-danger">
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                    </form>
+                    <form action="{% url 'update_order' i.id %}" method="get">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{i.id}}">
+                        <button class="btn btn-primary">
+                            <i class="far fa-edit"></i>
+                        </button>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Продажа №: {{i.id}}</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Покупатель: {{i.customer}}</li>
+                        <li class="list-group-item">Продавец: {{i.seller.last_name}} {{i.seller.first_name}}</li>
+                        <li class="list-group-item">Должность: {{i.seller.get_position_display}}</li>
+                        <li class="list-group-item">Книга: {{i.product.name_product}}<br>
+                            Жанр: {{i.product.get_genre_display}}
+                        </li>
+                        <li class="list-group-item">Cумма покупки: {{i.total}} UAH</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+        </div>
+    </div>
+</div>
+
+
+<
+
+{% include './partials/paginator.html' %}
+{% endblock %}

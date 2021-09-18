@@ -1,5 +1,5 @@
 from django import forms
-from .models import Book, Customer, Seller
+from .models import Book, Customer, Seller, Order
 
 
 class UpdateBook(forms.ModelForm):
@@ -64,3 +64,34 @@ class UpdateSeller(forms.ModelForm):
             'img': forms.FileInput(attrs={'class': 'form-control'}),
             'recruitment': forms.SelectDateWidget(),
         }
+
+
+class UpdateOrder(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = '__all__'
+        labels = {
+            'customer': 'Покупатель',
+            'seller': 'Продавец',
+            'product': 'Книга',
+            'date': 'Дата покупки',
+            'total': 'Сумма',
+        }
+
+        widgets = {
+            'customer': forms.Select(attrs={'class': 'form-control'}),
+            'seller': forms.Select(attrs={'class': 'form-select'}),
+            'product': forms.Select(attrs={'class': 'form-select'}),
+            'date': forms.DateInput(attrs={'class': 'form-select'}),
+            'total': forms.TextInput(attrs={'class': 'form-control',
+                                            'type':'number'}),
+        }
+
+
+class Report1(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['seller']
+
+    labels = {'seller': 'Продавец'}
+    widget = {'seller': forms.ModelChoiceField()}

@@ -30,10 +30,13 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'seller' %}">Продавцы</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'order' %}">Продажи</a>
+                </li>
             </ul>
             <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
+                <input class="form-control me-2" name="search_query" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Поиск</button>
             </form>
         </div>
     </div>
