@@ -98,6 +98,8 @@ class Order(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=64, default='', verbose_name='Имя')
+    last_name = models.CharField(max_length=64, default='', verbose_name='Фамилия')
     city = models.CharField(max_length=64, default='', verbose_name='Город')
     phone = models.CharField(max_length=64, default='', verbose_name='Телефон')
     avatar = models.ImageField(upload_to='profile/%Y/%m/%d', blank=True, null=True, verbose_name='Изображение')

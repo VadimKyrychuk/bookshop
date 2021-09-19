@@ -39,20 +39,24 @@
     display: flex;
     justify-content: flex-end;">
                 {% if request.user.is_anonymous %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Войти</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Зарегистрироваться</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Войти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Зарегистрироваться</a>
+                    </li>
+
                 {% endif %}
-    {% if request.user.is_authenticated %}
-        <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Отлучиться</a>
-                </li>
-    <span style="    padding-top: 8px;
-    font-size: 16px;">Привет, <strong><a href="#">{{ request.user.username }}</a>!</strong> </span>
-        {% endif %}
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Отлучиться</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'edit' %}">Редактировать профиль</a>
+                    </li>
+                    <span style="    padding-top: 8px;
+    font-size: 16px;">Привет, <strong><a href="#">{% firstof request.user.last_name request.user.username %}</a>!</strong> </span>
+                {% endif %}
 
             </div>
         </div>

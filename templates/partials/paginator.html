@@ -3,21 +3,21 @@
         <nav>
             <ul class="pagination mt-4" style="padding-left: 466px">
                 {% if content.has_previous %}
-                    <li class="page-item"><a class="page-link"
+                    <li class="page-item" style="margin-right: 15px;"><a class="page-link" style="border-radius: 9px"
                                              href="?page={{ content.previous_page_number }}">Предыдущая</a>
                     </li>
                 {% endif %}
                 {% for num in content.paginator.page_range %}
-                    <li class="page-item {% if request.GET.page == num|stringformat:'i' %} active {% endif %}">
+                    <li class="page-item {% if request.GET.page == num|stringformat:'i' %} active {% endif %}" style="margin-right: 15px;">
                         {% if num >= content.number|add:-2 and num <= content.number|add:2 %}
-                            <a class="page-link"
+                            <a class="page-link" style="border-radius: 9px"
                                href="?page={{ num }}">{{ num }}</a>
                         {% endif %}
                     </li>
                 {% endfor %}
                 {% if content.has_next %}
-                    <li class="page-item">
-                        <a class="page-link"
+                    <li class="page-item" style="margin-right: 15px;">
+                        <a class="page-link" style="border-radius: 9px"
                            href="?page={{ content.next_page_number }}">Следующая</a>
                     </li>
                 {% endif %}
