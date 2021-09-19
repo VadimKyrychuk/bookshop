@@ -1,0 +1,32 @@
+#content-main{
+    margin-top: 100px;
+}
+#content-main button{
+        font-size: 33px;
+    border: 1px solid black;
+    padding: 15px 30px 15px 30px;
+    border-radius: 12px;
+    color: black;
+    width: 245px;
+    margin-bottom: 50px;
+}
+
+body{
+    height: 100%;
+    width: 100%;
+    background: url("bg.png");
+
+}
+#home-container{
+    min-height: 64vh;
+}
+#book-view{
+ box-shadow: 3px 5px 9px 0px black;
+    max-width: 490px;
+    margin-right:25px;
+}
+
+#container-report{
+    min-height: 80vh;
+}
+

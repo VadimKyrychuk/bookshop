@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class Customer(models.Model):
     first_name = models.CharField(max_length=64, blank=False, verbose_name='Имя')
@@ -37,7 +37,7 @@ class Seller(models.Model):
         verbose_name_plural = "Продавцы"
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name} {self.position}'
+        return f'{self.first_name} {self.last_name} {self.get_position_display()}'
 
 
 class Book(models.Model):
@@ -59,7 +59,7 @@ class Book(models.Model):
         verbose_name_plural = 'Книги'
 
     def __str__(self):
-        return self.genre + ' ' + self.name_product
+        return f'{self.get_genre_display()} \"{self.name_product}\"'
 
 
 class Order(models.Model):
@@ -94,3 +94,17 @@ class Order(models.Model):
 
     def __str__(self):
         return f'Продавец: {self.seller} Покупатель: {self.customer} {self.total}'
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    city = models.CharField(max_length=64, default='', verbose_name='Город')
+    phone = models.CharField(max_length=64, default='', verbose_name='Телефон')
+    avatar = models.ImageField(upload_to='profile/%Y/%m/%d', blank=True, null=True, verbose_name='Изображение')
+
+    def __str__(self):
+        return f'{self.user.first_name} {self.user.last_name}'
+
+    class Meta:
+        verbose_name = 'Профиль'
+        verbose_name_plural = 'Профили'

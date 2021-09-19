@@ -1,7 +1,7 @@
 {% extends './partials/base.html' %}
 
 {% block content %}
-<div class="container">
+<div class="container" >
     <div class="row">
         <div class="col-md-10" style="    display: flex;justify-content: center; margin-top: 17px;">
             <form method="post" style="    display: flex;
@@ -23,15 +23,11 @@
         {% for i in content %}
         <div class="col-md-6">
             <div class="card border-dark mb-3" style="max-width: 20rem; padding:6px;margin-top:40px">
-                <div class="card-header">{{i.last_name}} {{i.first_name}}</div>
+                <div class="card-header">{{i.product.name_product}}</div>
                 <div class="card-body text-dark">
-                    <p class="card-text">{{i.phone}}</p>
-                    <p class="card-text">{% firstof i.email "Не найдено" %}</p>
-                    {% if i.discount == True %}
-                    <p class="card-text">Есть скидочная карта</p>
-                    {% else %}
-                    <p class="card-text">Скидочной карты нет</p>
-                    {% endif %}
+                    <p class="card-text">Покупатель: {{i.customer.last_name}} {{i.customer.first_name}}</p>
+                    <p class="card-text">Продавец: {{i.seller.last_name}} {{i.seller.first_name}}</p>
+                    <p class="card-text">Сумма сделки: {{ i.total }} UAH</p>
                 </div>
             </div>
 

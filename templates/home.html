@@ -1,5 +1,26 @@
 {% extends './partials/base.html' %}
 
 {% block content %}
+    <div class="container-fluid" id="home-container">
+        <div class="row offset-md-3" id="content-main">
+            <div class="col-md-6" >
+                <form action="{% url 'book' %}">
+                    <button class="btn btn-link">Книги</button>
+                </form>
+                 <form action="{% url 'customer' %}">
+                    <button class="btn btn-link">Покупатели</button>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <form action="{% url 'seller' %}">
+                    <button class="btn btn-link">Продавцы</button>
+                </form>
+                 <form action="{% url 'order' %}">
+                    <button class="btn btn-link">Продажи</button>
+                </form>
+            </div>
 
+            </div>
+        </div>
+    </div>
 {% endblock %}

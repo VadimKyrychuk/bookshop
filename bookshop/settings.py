@@ -55,7 +55,7 @@ ROOT_URLCONF = 'bookshop.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates', BASE_DIR / 'templates/report']
+        'DIRS': [BASE_DIR / 'templates', BASE_DIR / 'templates/report', BASE_DIR / 'templates/authorization']
         ,
         'APP_DIRS': True,
         'OPTIONS': {

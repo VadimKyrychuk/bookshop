@@ -1,15 +1,16 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect
 from .models import *
-from .forms import UpdateBook, UpdateCustomer, UpdateSeller, UpdateOrder, Report1
+from .forms import UpdateBook, UpdateCustomer, UpdateSeller, UpdateOrder, Report1, OrderDate, SellerProduct, UserRegisterForm, UserLoginForm
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.contrib.auth import logout, login as user_login
+
 
 def pagination(request, instanse):
     pagin = Paginator(instanse, 4)
     page = request.GET.get('page')
     page_obj = pagin.get_page(page)
     return page_obj
-
 
 
 def home(request):
@@ -22,10 +23,10 @@ def book(request):
         curr_element = request.POST.get('id', None)
         elem = get_object_or_404(pk=curr_element, klass=Book)
         elem.delete()
-        book = Book.objects.all() if not search_query  else Book.objects.filter\
+        book = Book.objects.all() if not search_query else Book.objects.filter \
             (Q(name_product__icontains=search_query))
     else:
-        book = Book.objects.all() if not search_query  else Book.objects.filter\
+        book = Book.objects.all() if not search_query else Book.objects.filter \
             (Q(name_product__icontains=search_query))
     return render(request, 'book.html', {'content': pagination(request, book)})
 
@@ -118,6 +119,7 @@ def update_order(request, order_id):
         return redirect('/order')
     return render(request, 'update_order.html', {'form': form, 'order_id': order_id})
 
+
 def seller_buyers(request):
     form = Report1()
     seller_buyers = Order.objects.filter(seller__pk=request.POST.get('seller'))
@@ -127,4 +129,73 @@ def seller_buyers(request):
         if not i.customer.id in id_custom:
             custom.append(i.customer)
             id_custom.append(i.customer.id)
-    return render(request, 'seller_buyers.html', {'form':form, 'content':custom})
+    if custom:
+        form = Report1(request.POST)
+    return render(request, 'seller_buyers.html', {'form': form, 'content': custom})
+
+
+def order_date(request):
+    form = OrderDate
+    content = Order.objects.filter(date=request.POST.get('date'))
+    if request.POST:
+        form = OrderDate(request.POST)
+    return render(request, 'orderdate.html', {'form': form, 'content': content})
+
+
+def seller_product(request):
+    form = SellerProduct
+    filtered = Order.objects.filter(product__pk=request.POST.get('product'))
+    id_seller = []
+    content = []
+    for i in filtered:
+        if not i.seller.id in id_seller:
+            id_seller.append(i.seller.id)
+            content.append(i)
+    if request.POST:
+        form = SellerProduct(request.POST)
+    return render(request, 'sellerproduct.html', {'form': form, 'content': content})
+
+
+def customer_product(request):
+    form = SellerProduct
+    filtered = Order.objects.filter(product__pk=request.POST.get('product'))
+    id_customer = []
+    content = []
+    for i in filtered:
+        if not i.seller.id in id_customer:
+            id_customer.append(i.customer.id)
+            content.append(i)
+    if request.POST:
+        form = SellerProduct(request.POST)
+    return render(request, 'customer_product.html', {'form': form, 'content':content})
+
+
+def login(request):
+    if request.method == 'POST':
+        form = UserLoginForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            user_login(request, user)
+            return redirect('/')
+        else:
+            return redirect('/login')
+    else:
+        form = UserLoginForm()
+        return render(request, 'login.html', {'form':form})
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            Profile.objects.create(user=user)
+            return redirect('/login')
+        else:
+            pass
+    else:
+        form = UserRegisterForm()
+    return render(request, 'authorization/register.html', {'form':form})
+
+def user_logout(request):
+    logout(request)
+    return redirect('login')

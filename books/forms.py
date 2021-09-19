@@ -1,5 +1,7 @@
 from django import forms
 from .models import Book, Customer, Seller, Order
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
 
 
 class UpdateBook(forms.ModelForm):
@@ -84,7 +86,7 @@ class UpdateOrder(forms.ModelForm):
             'product': forms.Select(attrs={'class': 'form-select'}),
             'date': forms.DateInput(attrs={'class': 'form-select'}),
             'total': forms.TextInput(attrs={'class': 'form-control',
-                                            'type':'number'}),
+                                            'type': 'number'}),
         }
 
 
@@ -94,4 +96,37 @@ class Report1(forms.ModelForm):
         fields = ['seller']
 
     labels = {'seller': 'Продавец'}
-    widget = {'seller': forms.ModelChoiceField()}
+    widget = {'seller': forms.Select(attrs={'class': 'form-select'})}
+
+
+class OrderDate(forms.Form):
+    date = forms.DateField(required=True, widget=forms.DateInput(attrs={'class': 'form-control',
+                                                                        'type': 'date'}), label="Дата продажи")
+
+
+class SellerProduct(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['product']
+
+    labels = {'product': 'Товар'}
+    widget = {'product': forms.Select(attrs={'class': 'form-select'})}
+
+class UserRegisterForm(UserCreationForm):
+    email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class':'form-control'}))
+    username = forms.CharField(label='Имя пользователя', widget=forms.TextInput(attrs={'class':'form-control'}))
+    password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    password2 = forms.CharField(label='Подтвердите пароль', widget=forms.PasswordInput(attrs={'class':'form-control'}))
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2')
+
+class UserLoginForm(AuthenticationForm):
+    username = forms.CharField(label='Имя пользователя', widget=forms.TextInput(attrs={'class':'form-control'}))
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class':'form-control'}))
+
+    class Meta:
+        model = User
+        fields = ('username', 'password')
+

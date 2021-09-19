@@ -23,23 +23,16 @@
         {% for i in content %}
         <div class="col-md-6">
             <div class="card border-dark mb-3" style="max-width: 20rem; padding:6px;margin-top:40px">
-                <div class="card-header">{{i.last_name}} {{i.first_name}}</div>
+                <div class="card-header"> Продавец: {{i.seller.last_name}} {{i.seller.first_name}}</div>
                 <div class="card-body text-dark">
-                    <p class="card-text">{{i.phone}}</p>
-                    <p class="card-text">{% firstof i.email "Не найдено" %}</p>
-                    {% if i.discount == True %}
-                    <p class="card-text">Есть скидочная карта</p>
-                    {% else %}
-                    <p class="card-text">Скидочной карты нет</p>
-                    {% endif %}
+                    <p class="card-text">Должность: {{i.seller.get_position_display}} </p>
+                    <p class="card-text">Контакты: {%  firstof i.seller.email 'Не найдено' %}<br>&emsp;&emsp;&emsp;&emsp;
+                                                    {{i.seller.phone}}</p>
                 </div>
             </div>
-
         </div>
         {% endfor %}
         {% endif %}
     </div>
 </div>
-
-
 {% endblock %}
