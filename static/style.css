@@ -26,6 +26,15 @@ body{
     margin-right:25px;
 }
 
+body{
+    display: flex;
+    flex-direction: column;
+}
+
+body > #base{
+    flex: 1;
+}
+
 #container-report{
     min-height: 80vh;
 }
